@@ -21,6 +21,17 @@ app = FastAPI()
 async def hello():
     return {"message": "Abhishek is a good boy"}
 
+
+@app.get('/all')
+async def get_all_blog(db: Session = Depends(get_db)):
+    blogs=db.query(models.Blog).all()
+    return blogs
+
+@app.get('/blog/{id}')
+async def get_all_blog(id:int, db: Session = Depends(get_db)):
+    blog=db.query(models.Blog).filter(models.Blog.id==id).first()
+    return blog
+
 @app.post('/blog')
 async def create_blog(req: Blog,db: Session = Depends(get_db)):
     new_blog=models.Blog(title=req.title,body=req.body)
@@ -28,3 +39,9 @@ async def create_blog(req: Blog,db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_blog)
     return new_blog
+
+@app.delete('/delete/{id}')
+async def delete(id:int,db: Session = Depends(get_db)):
+    db.query(models.Blog).filter(models.Blog.id==id).delete(synchronize_session=False)
+    db.commit()
+    return db.query(models.Blog).all()
