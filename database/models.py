@@ -5,7 +5,7 @@ from database import Base
 
 
 class Blog(Base):
-    __tablename__ = "users"
+    __tablename__ = "fastapi"
 
     id = Column(Integer, primary_key=True,index=True)
     # email = Column(String, unique=True, index=True)
